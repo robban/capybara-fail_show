@@ -27,12 +27,6 @@ module Capybara
               # Only works when dev server running....
               Capybara.asset_host = "http://localhost:3000"
 
-              puts path
-              puts method(:body).source_location
-              puts "---BODY---"
-              puts body
-              puts "---END BODY---"
-
               File.open(path,'w') { |f| f.write(Capybara::Helpers.inject_asset_host(body.gsub(/<body.*>/, extrahtml_replacing_body_start))) }
               begin
                 require "launchy"
