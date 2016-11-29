@@ -1,0 +1,19 @@
+= Capybara Fail-show
+
+Helper to show capybara feature fails in the browser
+
+== Quickstart
+1. Add the following to your Gemfile
+gem 'capybara-fail_show', git: 'git://github.com/robban/capybara-fail_show.git'
+
+2. In your spec_helper.rb add the row below (before RSpec.configure)
+Capybara::FailShow.activate
+
+3. Now your failing capybara tests will automatically open up in a browser window, making it easier to see what was wrong
+
+== Options
+If you have a spec where it does not make sence to show the browser, just set fail_show: false on your scenario
+Example: scenario "Test something on course", fail_show: false do
+
+== Inspiration and code copying from
+http://stackoverflow.com/questions/13982425/how-to-make-rspec-save-and-open-page-automatically-when-any-spec-fails
