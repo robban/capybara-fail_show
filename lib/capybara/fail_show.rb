@@ -2,6 +2,8 @@ module Capybara
 
   module FailShow
 
+    DEBUG_PRINT = false
+
     def self.activate
 
       RSpec.configure do |config|
@@ -10,8 +12,22 @@ module Capybara
         # http://stackoverflow.com/questions/13982425/how-to-make-rspec-save-and-open-page-automatically-when-any-spec-fails
 
         config.after do
-          if RSpec.current_example.metadata[:type] == :feature and RSpec.current_example.exception.present?
-            puts RSpec.current_example.exception.inspect
+
+          # If you want to disable showing the browser window, set fail_show: false on your scenario
+          # Example: scenario "Test something on course", fail_show: false do
+
+          fail_show_disabled = RSpec.current_example.metadata[:fail_show] == false
+          if !fail_show_disabled && RSpec.current_example.metadata[:type] == :feature && RSpec.current_example.exception.present?
+
+            if DEBUG_PRINT
+              puts "Example metadata"
+              puts RSpec.current_example.metadata.inspect
+              puts "Exception class:"
+              puts RSpec.current_example.exception.class.to_s
+              puts "Exception:"
+              puts RSpec.current_example.exception.inspect
+            end
+
             # Check so it is not something like a Template render error..
             if RSpec.current_example.exception.class.to_s.include?("Capybara") || RSpec.current_example.exception.class.to_s.include?("RSpec")
 
@@ -42,4 +58,3 @@ module Capybara
     end
   end
 end
-
