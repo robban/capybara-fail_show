@@ -43,7 +43,13 @@ module Capybara
               # Only works when dev server running....
               Capybara.asset_host = "http://localhost:3000"
 
-              File.open(path,'w') { |f| f.write(Capybara::Helpers.inject_asset_host(body.gsub(/<body.*>/, extrahtml_replacing_body_start))) }
+              if body.match(/<body.*>/)
+                modified_html = body.gsub(/<body.*>/, extrahtml_replacing_body_start)
+              else
+                # For case where result is json
+                modified_html = extrahtml_replacing_body_start + body + "</body>"
+              end
+              File.open(path,'w') { |f| f.write(Capybara::Helpers.inject_asset_host(modified_html)) }
               begin
                 require "launchy"
                 Launchy.open(path)
